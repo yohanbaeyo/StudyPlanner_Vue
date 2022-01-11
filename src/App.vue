@@ -1,28 +1,34 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Hello World!!</h1>
+    <Calendar :showing-date="showingDate" :showing-type="showingType"></Calendar>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+// import HelloWorld from "@/components/HelloWorld";
+import Calendar from "@/components/Calendar";
+import {ShowingType} from "@/Enums/Enums"
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    // HelloWorld,
+    Calendar,
+  },
+  data() {
+    return {
+      showingDate: new Date(),
+      showingType: ShowingType.MONTHLY
+    }
+  },
+  methods: {
+
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
