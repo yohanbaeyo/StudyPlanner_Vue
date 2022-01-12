@@ -99,23 +99,22 @@ export default {
       if(idx>31 || idx<1) {
         return
       }
-      let dateString = ""+this.showingDate.getFullYear()+"-"+(this.showingDate.getMonth()+1)+"-"+idx
-      this.changeSelectedDate(new Date(dateString))
+      this.changeSelectedDate(new Date(this.showingDate.getFullYear(), this.showingDate.getMonth(), idx))
     },
     updateShowingDateByArrow(event) {
       let newDate
       console.log(this.showingDate.getMonth())
       if(event.currentTarget.id === "left-arrow") {
         if(this.showingDate.getMonth() === 0) {
-          newDate = new Date(""+(this.showingDate.getFullYear()-1)+"-12-01")
+          newDate = new Date(this.showingDate.getFullYear()-1,11,1)
         } else {
-          newDate = new Date(""+(this.showingDate.getFullYear())+"-"+(this.showingDate.getMonth())+"-01")
+          newDate = new Date(this.showingDate.getFullYear(),this.showingDate.getMonth()-1,1)
         }
       } else if(event.currentTarget.id === "right-arrow") {
         if(this.showingDate.getMonth() === 11) {
-          newDate = new Date(""+(this.showingDate.getFullYear()+1)+"-01-01")
+          newDate = new Date(this.showingDate.getFullYear()+1,0,1)
         } else {
-          newDate = new Date(""+(this.showingDate.getFullYear())+"-"+(this.showingDate.getMonth()+2)+"-01")
+          newDate = new Date(this.showingDate.getFullYear(),this.showingDate.getMonth()+1,1)
         }
       }
       console.log(newDate)
@@ -137,7 +136,7 @@ export default {
 <style scoped>
 
 #calendar-template {
-  font-family: "Noto Sans";
+  font-family: "Noto Sans", serif;
 }
 
 .Day-0 {
@@ -170,7 +169,6 @@ export default {
   padding: 15px;
   -ms-user-select: none;
   -moz-user-select: none;
-  -khtml-user-select: none;
   -webkit-user-select: none;
   user-select: none;
 }
