@@ -1,26 +1,26 @@
 <template>
   <div id="calendar-template">
-    <p>HEllo World!</p>
-    <p>{{showingDate}}</p>
-<!--
-    <p>{{showingType===ShowingType.MONTHLY}}</p>
-    <p>{{showingType===symb1}}</p>
--->
-    <button @click="updateSelectedDate"></button>
-    <div id="calendar-container">
-      <h3>{{showingDate.getFullYear()}}년 {{showingDate.getMonth()+1}}월</h3>
-      <table id="calendar-table">
-        <tr>
-          <th v-for="(i1,idx) in ['S', 'M', 'T', 'W', 'T', 'F', 'S']" :key="idx" :class="'Day-'+idx">
-            <p>{{i1}}</p>
-          </th>
-        </tr>
-        <tr v-for="i in rowCnt" :key="i">
-          <td v-for="j in 7" :key="j" :class="'Day-'+(j-1)" :id="'Date-'+(dateList[(i-1)*7+j-1]!==-1?dateList[(i-1)*7+j-1]:i*1000+j*100)">
-            <p v-if="(i-1)*7+j-1<dateList.length && dateList[(i-1)*7+j-1]!==-1" >{{dateList[(i-1)*7+j-1]}}</p>
-          </td>
-        </tr>
-      </table>
+    <button @click="displaySelectedDate(new Date())">현재 날짜로 이동</button>
+    <div>
+      <div id="calendar-container">
+        <div style="display: flex; justify-content: space-evenly">
+          <div id="left-arrow" @click="updateShowingDateByArrow">&lt;</div>
+          <div style="flex-basis: 7rem; text-align: center"><h3 style="display: inline;">{{showingDate.getFullYear()}}년 {{showingDate.getMonth()+1}}월</h3></div>
+          <div id="right-arrow" @click="updateShowingDateByArrow">&gt;</div>
+        </div>
+        <table id="calendar-table">
+          <tr>
+            <th v-for="(i1,idx) in ['S', 'M', 'T', 'W', 'T', 'F', 'S']" :key="idx" :class="'Day-'+idx">
+              <p>{{i1}}</p>
+            </th>
+          </tr>
+          <tr v-for="i in rowCnt" :key="i">
+            <td v-for="j in 7" :key="j" :class="'Day-'+(j-1)" :id="'Date-'+(dateList[(i-1)*7+j-1]!==-1?dateList[(i-1)*7+j-1]:i*1000+j*100)" @click="updateSelectedDateByClick">
+              <p v-if="(i-1)*7+j-1<dateList.length && dateList[(i-1)*7+j-1]!==-1" >{{dateList[(i-1)*7+j-1]}}</p>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -28,10 +28,13 @@
 <script>
 import {ShowingType} from "@/Enums/Enums";
 
+Date.prototype.toId = function() {
+  return this.getMonth() + this.getFullYear() * 100
+}
+
 export default {
   name: "Calendar",
   props: {
-    showingDate: Date,
     showingType: ShowingType,
   },
   data() {
@@ -39,25 +42,23 @@ export default {
       ShowingType: ShowingType,
       dateList: [],
       rowCnt: 0,
-      selectedDate: new Date()
-      // symb1: ShowingType.MONTHLY
+      selectedDate: new Date(),
+      showingDate: new Date()
 
+      // symb1: ShowingType.MONTHLY
     }
   },
   methods: {
-    dateToId(date) {
-      return date.getMonth() + date.getFullYear() * 100
-    },
-    changeDateList() {
+    updateCalendarWithNewMonth() {
       let tmpDate = new Date(this.showingDate)
       tmpDate.setDate(tmpDate.getDate()-tmpDate.getDate()+1)
       while(tmpDate.getDay()!==0) {
         tmpDate.setDate(tmpDate.getDate()-1)
       }
       this.dateList=[]
-      let goal = this.dateToId(this.showingDate)
-      while(this.dateToId(tmpDate)<=goal) {
-        if(this.dateToId(tmpDate)<goal) {
+      let goal = this.showingDate.toId()
+      while(tmpDate.toId()<=goal) {
+        if(tmpDate.toId()<goal) {
           this.dateList.push(-1)
         } else {
           this.dateList.push(tmpDate.getDate())
@@ -67,19 +68,68 @@ export default {
       console.log(this.dateList)
       this.rowCnt=Math.ceil(this.dateList.length/7-0.0001)
     },
-    updateSelectedDate() {
-      if(this.dateToId(this.showingDate)===this.dateToId(this.selectedDate)) {
-        let $selectedOne = document.getElementById("Date-"+(this.selectedDate.getDate()))
-        $selectedOne.classList.add("crrntDate")
-        console.log(this.selectedDate.getDate())
-      } else {
-        let $selectedOne = document.getElementById("Date-"+(this.selectedDate.getDate()))
-        $selectedOne.classList.remove("crrntDate")
+    changeSelectedDate(newDate) {
+      if(this.selectedDate.toId() === this.showingDate.toId()) {
+        let $td = document.getElementById("Date-"+this.selectedDate.getDate())
+        if($td !== null) {
+          $td.classList.remove("currantDate")
+        }
       }
+      this.selectedDate = newDate
+      console.log(this.selectedDate)
+      let $td = document.getElementById("Date-"+this.selectedDate.getDate())
+      $td.classList.add("currantDate")
+    },
+    removeHighlighted(newDate) {
+      if(this.showingDate.toId() === this.selectedDate.toId() && this.showingDate.toId() !== newDate.toId()) {
+        let $td = document.getElementById("Date-"+this.selectedDate.getDate())
+        $td.classList.remove("currantDate")
+      }
+    },
+    addHighlighted() {
+      if(this.showingDate.toId() === this.selectedDate.toId()) {
+        let $td = document.getElementById("Date-"+this.selectedDate.getDate())
+        $td.classList.add("currantDate")
+      }
+    },
+    updateSelectedDateByClick(event) {
+      console.log(event.currentTarget.id)
+      const regex = /[^0-9]/g;
+      const idx = event.currentTarget.id.replace(regex, "")
+      if(idx>31 || idx<1) {
+        return
+      }
+      let dateString = ""+this.showingDate.getFullYear()+"-"+(this.showingDate.getMonth()+1)+"-"+idx
+      this.changeSelectedDate(new Date(dateString))
+    },
+    updateShowingDateByArrow(event) {
+      let newDate
+      console.log(this.showingDate.getMonth())
+      if(event.currentTarget.id === "left-arrow") {
+        if(this.showingDate.getMonth() === 0) {
+          newDate = new Date(""+(this.showingDate.getFullYear()-1)+"-12-01")
+        } else {
+          newDate = new Date(""+(this.showingDate.getFullYear())+"-"+(this.showingDate.getMonth())+"-01")
+        }
+      } else if(event.currentTarget.id === "right-arrow") {
+        if(this.showingDate.getMonth() === 11) {
+          newDate = new Date(""+(this.showingDate.getFullYear()+1)+"-01-01")
+        } else {
+          newDate = new Date(""+(this.showingDate.getFullYear())+"-"+(this.showingDate.getMonth()+2)+"-01")
+        }
+      }
+      console.log(newDate)
+      this.removeHighlighted(newDate)
+      this.showingDate=newDate
+      this.updateCalendarWithNewMonth()
+      this.$nextTick(this.addHighlighted)
     }
   },
   beforeMount() {
-    this.changeDateList()
+    this.updateCalendarWithNewMonth()
+  },
+  mounted() {
+    this.addHighlighted()
   }
 }
 </script>
@@ -88,7 +138,6 @@ export default {
 
 #calendar-template {
   font-family: "Noto Sans";
-
 }
 
 .Day-0 {
@@ -101,7 +150,6 @@ export default {
 #calendar-table td, th{
   padding-left: 15px;
   padding-right: 15px;
-  text-align: center;
   /*border: 1px solid black;*/
 }
 #calendar-table th {
@@ -111,22 +159,30 @@ export default {
 #calendar-table {
   /*border: 1px solid lightgray;*/
   border-collapse: collapse;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  text-align: center;
 
 }
 
 #calendar-container {
   width: fit-content;
   background-color: rgba(255, 251, 226, 0.27);
-
+  padding: 15px;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 #calendar-container h3{
   text-align: center;
   padding-top: 1rem;
+  width: fit-content;
+  height: auto;
 }
 
-.crrntDate {
+.currantDate {
   background-color: red;
   color: white;
 }

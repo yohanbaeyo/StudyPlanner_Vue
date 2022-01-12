@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <h1>Hello World!!</h1>
-    <Calendar :showing-date="showingDate" :showing-type="showingType"></Calendar>
+    <h1>Study Planner</h1>
+    <Calendar :showing-type="showingType" v-if="showingType===ShowingType.MONTHLY"></Calendar>
   </div>
 </template>
 
@@ -19,8 +19,8 @@ export default {
   },
   data() {
     return {
-      showingDate: new Date(),
-      showingType: ShowingType.MONTHLY
+      showingType: ShowingType.MONTHLY,
+      ShowingType: ShowingType
     }
   },
   methods: {
