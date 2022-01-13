@@ -1,21 +1,22 @@
 <template>
-  <ul id="nav-bar" class="nav-collapsed">
-    <li>
-      <span class="material-icons md-24" style="color: white" @click="toggleNavCollapsed">menu</span>
-    </li>
-    <li><a href="./home"><span class="material-icons md-24" style="color: white">home</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">HOME</span></a></li>
-    <li><a href="./monthly"><span class="material-icons md-24" style="color: white">calendar_month</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">MONTHLY</span></a></li>
-    <li><a href="./weekly"><span class="material-icons md-24" style="color: white">date_range</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">WEEKLY</span></a></li>
+  <ul id="nav-bar" class="nav-collapsed" @mouseenter="toggleNavCollapsed" @mouseleave="toggleNavCollapsed">
+    <li><span class="material-icons md-24" style="color: white" >menu</span></li>
+    <li><router-link to="/"><span class="material-icons md-24" style="color: white">home</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">HOME</span></router-link></li>
+    <li @click="$emit('changeShowingType', ShowingType.MONTHLY)"> <router-link to="/monthly"><span class="material-icons md-24" style="color: white">calendar_month</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">MONTHLY</span></router-link></li>
+    <li @click="$emit('changeShowingType', ShowingType.WEEKLY)"> <router-link to="/weekly"><span class="material-icons md-24" style="color: white">date_range</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">WEEKLY</span></router-link></li>
   </ul>
 </template>
 
 <script>
 
+import {ShowingType} from "@/Enums/Enums";
+
 export default {
   name: "NavBar",
   data() {
     return{
-      navCollapsed: true
+      navCollapsed: true,
+      ShowingType: ShowingType
     }
   },
   methods: {
@@ -28,6 +29,15 @@ export default {
       }
       console.log($ul.classList)
       this.navCollapsed = !(this.navCollapsed)
+    },
+    clickParams() {
+      this.$parent.$router.push({
+        name: 'Monthly',
+        params: {showingType: this.showingType}
+      })
+    },
+    forDebug() {
+      console.log("DASDSADAD")
     }
   },
 }
@@ -42,7 +52,7 @@ ul {
   margin-top: 0;
   height: calc(var(--realVh) * 100);
   width: 10rem;
-  transition: 0.7s;
+  transition: width 0.7s;
   overflow: hidden;
   -ms-user-select: none;
   -moz-user-select: none;
@@ -52,7 +62,7 @@ ul {
 
 ul.nav-collapsed {
   width: calc(48px + 0.5rem);
-  transition: 0.5s;
+  transition: width 0.5s;
 }
 
 ul li{
@@ -71,7 +81,7 @@ ul li a {
 
 span {
   width: 1.5rem;
-  transition: 0.7s;
+  transition: width 0.7s;
   text-align: start;
   padding-left: 0;
 }
@@ -83,8 +93,11 @@ span.nav-bar-span {
 span.nav-collapsed {
   width: 0;
   overflow: hidden;
-  transition: 0.5s;
+  transition: width 0.5s;
 }
 
+li span {
+  vertical-align: center;
+}
 
 </style>

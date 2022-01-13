@@ -1,18 +1,20 @@
 <template>
   <div id="app">
     <div style="display: flex">
-      <NavBar></NavBar>
-      <Calendar :showing-type="showingType" v-if="showingType===ShowingType.MONTHLY"></Calendar>
+      <NavBar @changeShowingType="changeShowingType"></NavBar>
+<!--      <MonthlyCalendar :showing-type="showingType" v-if="showingType===ShowingType.MONTHLY"></MonthlyCalendar>-->
+      <router-view ></router-view>
     </div>
+
   </div>
 </template>
 
 <script>
 
 // import HelloWorld from "@/components/HelloWorld";
-import Calendar from "@/components/Calendar";
 import {ShowingType} from "@/Enums/Enums"
 import NavBar from "@/components/NavBar";
+// import MonthlyCalendar from "@/components/MonthlyCalendar";
 
 function setScreenSize() {
   let vh = window.innerHeight * 0.01
@@ -24,21 +26,25 @@ export default {
   components: {
     NavBar,
     // HelloWorld,
-    Calendar,
+    // MonthlyCalendar
   },
   data() {
     return {
-      showingType: ShowingType.MONTHLY,
+      showingType: ShowingType.WEEKLY,
       ShowingType: ShowingType
     }
-  },
-  methods: {
-
   },
   mounted() {
     setScreenSize()
     window.addEventListener('resize', ()=>setScreenSize())
+  },
+  methods: {
+    changeShowingType(newShowingType) {
+      console.log(newShowingType)
+      this.showingType = newShowingType
+    }
   }
+
 }
 </script>
 

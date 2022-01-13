@@ -1,6 +1,6 @@
 <template>
   <div id="calendar-template">
-<!--    <button @click="gotoDate(new Date())">현재 날짜로 이동</button>-->
+    <!--    <button @click="gotoDate(new Date())">현재 날짜로 이동</button>-->
     <div>
       <div id="calendar-container">
         <div style="display: flex; justify-content: space-evenly; height: 5vh">
@@ -33,10 +33,7 @@ Date.prototype.toId = function() {
 }
 
 export default {
-  name: "Calendar",
-  props: {
-    showingType: ShowingType,
-  },
+  name: "MonthlyCalendar",
   data() {
     return {
       ShowingType: ShowingType,
@@ -158,7 +155,11 @@ export default {
 
 #calendar-table td, th{
   /*border: 1px solid black;*/
-  height: calc((var(--realVh, 1vh) * 100 - 14vh)/6.5);
+  height: calc((var(--realVh, 1vh) * 100 - 14vh)/6.5 - 5px);
+  text-align: left;
+  vertical-align: top;
+  padding-left: 10px;
+  padding-top: 5px;
 }
 #calendar-table th {
   border-bottom: 1px solid lightgray;
@@ -192,7 +193,7 @@ export default {
 }
 
 .currantDate {
-  background-color: #ff0000;
+  background-color: #ff4524;
   color: white;
 }
 
