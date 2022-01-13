@@ -1,9 +1,9 @@
 <template>
   <div id="calendar-template">
-    <button @click="displaySelectedDate(new Date())">현재 날짜로 이동</button>
+<!--    <button @click="gotoDate(new Date())">현재 날짜로 이동</button>-->
     <div>
       <div id="calendar-container">
-        <div style="display: flex; justify-content: space-evenly">
+        <div style="display: flex; justify-content: space-evenly; height: 5vh">
           <div id="left-arrow" @click="updateShowingDateByArrow">&lt;</div>
           <div style="flex-basis: 7rem; text-align: center"><h3 style="display: inline;">{{showingDate.getFullYear()}}년 {{showingDate.getMonth()+1}}월</h3></div>
           <div id="right-arrow" @click="updateShowingDateByArrow">&gt;</div>
@@ -14,7 +14,7 @@
               <p>{{i1}}</p>
             </th>
           </tr>
-          <tr v-for="i in rowCnt" :key="i">
+          <tr v-for="i in 6" :key="i">
             <td v-for="j in 7" :key="j" :class="'Day-'+(j-1)" :id="'Date-'+(dateList[(i-1)*7+j-1]!==-1?dateList[(i-1)*7+j-1]:i*1000+j*100)" @click="updateSelectedDateByClick">
               <p v-if="(i-1)*7+j-1<dateList.length && dateList[(i-1)*7+j-1]!==-1" >{{dateList[(i-1)*7+j-1]}}</p>
             </td>
@@ -122,6 +122,14 @@ export default {
       this.showingDate=newDate
       this.updateCalendarWithNewMonth()
       this.$nextTick(this.addHighlighted)
+    },
+    gotoDate(newDate) {
+      if(newDate == null) return
+      this.removeHighlighted(newDate)
+      this.showingDate=newDate
+      this.updateCalendarWithNewMonth()
+      this.selectedDate=newDate
+      this.$nextTick(this.addHighlighted)
     }
   },
   beforeMount() {
@@ -135,8 +143,10 @@ export default {
 
 <style scoped>
 
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap');
+
 #calendar-template {
-  font-family: "Noto Sans", serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 .Day-0 {
@@ -147,12 +157,12 @@ export default {
 }
 
 #calendar-table td, th{
-  padding-left: 15px;
-  padding-right: 15px;
   /*border: 1px solid black;*/
+  height: calc((var(--realVh, 1vh) * 100 - 14vh)/6.5);
 }
 #calendar-table th {
   border-bottom: 1px solid lightgray;
+  height: 7vh;
 }
 
 #calendar-table {
@@ -160,7 +170,7 @@ export default {
   border-collapse: collapse;
   font-size: 1.2rem;
   text-align: center;
-
+  width: 40vw;
 }
 
 #calendar-container {
@@ -171,18 +181,24 @@ export default {
   -moz-user-select: none;
   -webkit-user-select: none;
   user-select: none;
+  margin-top: 2vh;
+  margin-left: 2vh;
 }
 
 #calendar-container h3{
   text-align: center;
   padding-top: 1rem;
   width: fit-content;
-  height: auto;
 }
 
 .currantDate {
-  background-color: red;
+  background-color: #ff0000;
   color: white;
+}
+
+.today {
+  background-color: #fff480;
+  color: ghostwhite;
 }
 
 </style>
