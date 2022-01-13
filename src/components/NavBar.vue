@@ -1,9 +1,9 @@
 <template>
-  <ul id="nav-bar" class="nav-collapsed" @mouseenter="toggleNavCollapsed" @mouseleave="toggleNavCollapsed">
-    <li><span class="material-icons md-24" style="color: white" >menu</span></li>
-    <li><router-link to="/"><span class="material-icons md-24" style="color: white">home</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">HOME</span></router-link></li>
-    <li @click="$emit('changeShowingType', ShowingType.MONTHLY)"> <router-link to="/monthly"><span class="material-icons md-24" style="color: white">calendar_month</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">MONTHLY</span></router-link></li>
-    <li @click="$emit('changeShowingType', ShowingType.WEEKLY)"> <router-link to="/weekly"><span class="material-icons md-24" style="color: white">date_range</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">WEEKLY</span></router-link></li>
+  <ul id="nav-bar" class="nav-collapsed" @mouseleave="makeNavCollapsed">
+    <li style="margin-top: 0.75rem"  @mouseenter="makeNavNotCollapsed"><span class="material-icons md-24" style="color: white" >menu</span></li>
+    <li @click="$emit('changeShowingType', ShowingType.HOME)" :class="{'router-link-parent-exact-active' : subIsActive('/')}"><router-link :to="{name: 'Index'}"><span class="material-icons md-24" style="color: white">home</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">HOME</span></router-link></li>
+    <li @click="$emit('changeShowingType', ShowingType.MONTHLY)" :class="{'router-link-parent-exact-active' : subIsActive('/monthly')}"> <router-link to="/monthly"><span class="material-icons md-24" style="color: white">calendar_month</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">MONTHLY</span></router-link></li>
+    <li @click="$emit('changeShowingType', ShowingType.WEEKLY)" :class="{'router-link-parent-exact-active' : subIsActive('/weekly')}"> <router-link to="/weekly"><span class="material-icons md-24" style="color: white">date_range</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">WEEKLY</span></router-link></li>
   </ul>
 </template>
 
@@ -20,14 +20,37 @@ export default {
     }
   },
   methods: {
-    toggleNavCollapsed() {
+    makeNavCollapsed() {
+      let $ul = document.getElementById("nav-bar")
+      $ul.classList.add("nav-collapsed")
+      let $spans = document.getElementsByClassName("nav-bar-span")
+      for (let $span of $spans) {
+        $span.classList.add("nav-collapsed")
+      }
+      // console.log($ul.classList)
+      this.navCollapsed = true
+      this.$emit('navCollapsed', false)
+    },
+    makeNavNotCollapsed() {
+      let $ul = document.getElementById("nav-bar")
+      $ul.classList.remove("nav-collapsed")
+      let $spans = document.getElementsByClassName("nav-bar-span")
+      for (let $span of $spans) {
+        $span.classList.remove("nav-collapsed")
+      }
+      // console.log($ul.classList)
+      this.navCollapsed = false
+      this.$emit('navCollapsed', true)
+    },
+    toogleNavCollapsed() {
       let $ul = document.getElementById("nav-bar")
       $ul.classList.toggle("nav-collapsed")
       let $spans = document.getElementsByClassName("nav-bar-span")
       for (let $span of $spans) {
         $span.classList.toggle("nav-collapsed")
       }
-      console.log($ul.classList)
+      // console.log($ul.classList)
+      this.$emit('navCollapsed', this.navCollapsed)
       this.navCollapsed = !(this.navCollapsed)
     },
     clickParams() {
@@ -38,6 +61,12 @@ export default {
     },
     forDebug() {
       console.log("DASDSADAD")
+    },
+    subIsActive(input) {
+      const paths = Array.isArray(input) ? input : [input]
+      return paths.some(path => {
+        return (this.$route.path.indexOf(path) === 0 && (this.$route.path.length===input.length || this.$route.path[input.length]==='/')) // current path starts with this path string
+      })
     }
   },
 }
@@ -48,7 +77,7 @@ ul {
   text-decoration: none;
   list-style-type: none;
   padding-left: 0;
-  background-color: #e86467;
+  background-color: #e5676d;
   margin-top: 0;
   height: calc(var(--realVh) * 100);
   width: 10rem;
@@ -58,6 +87,8 @@ ul {
   -moz-user-select: none;
   -webkit-user-select: none;
   user-select: none;
+  position: fixed;
+  top: 0; left: 0;
 }
 
 ul.nav-collapsed {
@@ -67,13 +98,16 @@ ul.nav-collapsed {
 
 ul li{
   display: block;
-  margin-top: 1.5rem;
-  margin-left: 1rem ;
   color: white;
   font-size: 1.2rem;
   height: 1.5rem;
   overflow: hidden;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-left: 1rem ;
+
 }
+
 ul li a {
   display: flex;
   color: white;
@@ -98,6 +132,10 @@ span.nav-collapsed {
 
 li span {
   vertical-align: center;
+}
+
+.router-link-parent-exact-active {
+  background-color: #961616;
 }
 
 </style>

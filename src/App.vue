@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <div style="display: flex">
-      <NavBar @changeShowingType="changeShowingType"></NavBar>
-<!--      <MonthlyCalendar :showing-type="showingType" v-if="showingType===ShowingType.MONTHLY"></MonthlyCalendar>-->
+    <div  ref="back" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7);">
+    </div>
+    <div>
+      <NavBar @changeShowingType="changeShowingType" @navCollapsed="changeNavCollapsed"></NavBar>
+      <!--      <MonthlyCalendar :showing-type="showingType" v-if="showingType===ShowingType.MONTHLY"></MonthlyCalendar>-->
       <router-view ></router-view>
     </div>
 
@@ -42,6 +44,13 @@ export default {
     changeShowingType(newShowingType) {
       console.log(newShowingType)
       this.showingType = newShowingType
+    },
+    changeNavCollapsed(willOpen) {
+      if(willOpen) {
+        this.$refs.back.style.display = 'block'
+      } else {
+        this.$refs.back.style.display = 'none';
+      }
     }
   }
 

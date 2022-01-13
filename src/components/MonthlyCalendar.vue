@@ -144,6 +144,7 @@ export default {
 
 #calendar-template {
   font-family: "Noto Sans KR", sans-serif;
+  margin-left: 4rem;
 }
 
 .Day-0 {
@@ -193,7 +194,7 @@ export default {
 }
 
 .currantDate {
-  background-color: #ff4524;
+  background-color: rgba(238, 40, 40, 0.79);
   color: white;
 }
 
