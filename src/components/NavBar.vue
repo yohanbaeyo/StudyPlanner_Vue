@@ -1,15 +1,17 @@
 <template>
   <ul id="nav-bar" class="nav-collapsed" @mouseleave="makeNavCollapsed">
     <li style="margin-top: 0.75rem"  @mouseenter="makeNavNotCollapsed"><span class="material-icons md-24" style="color: white" >menu</span></li>
-    <li @click="$emit('changeShowingType', ShowingType.HOME)" :class="{'router-link-parent-exact-active' : subIsActive('/')}"><router-link :to="{name: 'Index'}"><span class="material-icons md-24" style="color: white">home</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">HOME</span></router-link></li>
-    <li @click="$emit('changeShowingType', ShowingType.MONTHLY)" :class="{'router-link-parent-exact-active' : subIsActive('/monthly')}"> <router-link to="/monthly"><span class="material-icons md-24" style="color: white">calendar_month</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">MONTHLY</span></router-link></li>
-    <li @click="$emit('changeShowingType', ShowingType.WEEKLY)" :class="{'router-link-parent-exact-active' : subIsActive('/weekly')}"> <router-link to="/weekly"><span class="material-icons md-24" style="color: white">date_range</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">WEEKLY</span></router-link></li>
+    <li :class="{'router-link-parent-exact-active' : subIsActive('/')}"><router-link  @click.native="$emit('changeShowingType', ShowingType.HOME)" :to="{name: 'Index'}"><span class="material-icons md-24" style="color: white">home</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">HOME</span></router-link></li>
+    <li :class="{'router-link-parent-exact-active' : subIsActive('/tasks')}"> <router-link @click.native="$emit('changeShowingType', ShowingType.TASK)" to="/tasks"><span class="material-icons md-24" style="color: white">task_alt</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">TASKS</span></router-link></li>
+    <li :class="{'router-link-parent-exact-active' : subIsActive('/monthly')}"> <router-link @click.native="$emit('changeShowingType', ShowingType.MONTHLY)" to="/monthly"><span class="material-icons md-24" style="color: white">calendar_month</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">MONTHLY</span></router-link></li>
+    <li :class="{'router-link-parent-exact-active' : subIsActive('/weekly')}"> <router-link @click.native="$emit('changeShowingType', ShowingType.WEEKLY)" to="/weekly"><span class="material-icons md-24" style="color: white">date_range</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">WEEKLY</span></router-link></li>
+    <li :class="{'router-link-parent-exact-active' : subIsActive('/daily')}"> <router-link @click.native="$emit('changeShowingType', ShowingType.DAILY)" to="/daily"><span class="material-icons md-24" style="color: white">today</span><span class="nav-bar-span nav-collapsed" style="margin-left: 0.5rem">DAILY</span></router-link></li>
   </ul>
 </template>
 
 <script>
 
-import {ShowingType} from "@/Enums/Enums";
+import {ShowingType} from "@/Classes/Enums";
 
 export default {
   name: "NavBar",

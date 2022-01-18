@@ -1,32 +1,30 @@
 <template>
   <div id="calendar-template">
     <!--    <button @click="gotoDate(new Date())">현재 날짜로 이동</button>-->
-    <div>
-      <div id="calendar-container">
-        <div style="display: flex; justify-content: space-evenly; height: 5vh">
-          <div id="left-arrow" @click="updateShowingDateByArrow">&lt;</div>
-          <div style="flex-basis: 7rem; text-align: center"><h3 style="display: inline;">{{showingDate.getFullYear()}}년 {{showingDate.getMonth()+1}}월</h3></div>
-          <div id="right-arrow" @click="updateShowingDateByArrow">&gt;</div>
-        </div>
-        <table id="calendar-table">
-          <tr>
-            <th v-for="(i1,idx) in ['S', 'M', 'T', 'W', 'T', 'F', 'S']" :key="idx" :class="'Day-'+idx">
-              <p>{{i1}}</p>
-            </th>
-          </tr>
-          <tr v-for="i in 6" :key="i">
-            <td v-for="j in 7" :key="j" :class="'Day-'+(j-1)" :id="'Date-'+(dateList[(i-1)*7+j-1]!==-1?dateList[(i-1)*7+j-1]:i*1000+j*100)" @click="updateSelectedDateByClick">
-              <p v-if="(i-1)*7+j-1<dateList.length && dateList[(i-1)*7+j-1]!==-1" >{{dateList[(i-1)*7+j-1]}}</p>
-            </td>
-          </tr>
-        </table>
+    <div id="calendar-container">
+      <div style="display: flex; justify-content: space-evenly; height: 5vh">
+        <div id="left-arrow" @click="updateShowingDateByArrow">&lt;</div>
+        <div style="flex-basis: 7rem; text-align: center"><h3 style="display: inline;">{{showingDate.getFullYear()}}년 {{showingDate.getMonth()+1}}월</h3></div>
+        <div id="right-arrow" @click="updateShowingDateByArrow">&gt;</div>
       </div>
+      <table id="calendar-table">
+        <tr>
+          <th v-for="(i1,idx) in ['S', 'M', 'T', 'W', 'T', 'F', 'S']" :key="idx" :class="'Day-'+idx">
+            <p>{{i1}}</p>
+          </th>
+        </tr>
+        <tr v-for="i in 6" :key="i">
+          <td v-for="j in 7" :key="j" :class="'Day-'+(j-1)" :id="'Date-'+(dateList[(i-1)*7+j-1]!==-1?dateList[(i-1)*7+j-1]:i*1000+j*100)" @click="updateSelectedDateByClick">
+            <p v-if="(i-1)*7+j-1<dateList.length && dateList[(i-1)*7+j-1]!==-1" >{{dateList[(i-1)*7+j-1]}}</p>
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
 </template>
 
 <script>
-import {ShowingType} from "@/Enums/Enums";
+import {ShowingType} from "@/Classes/Enums";
 
 Date.prototype.toId = function() {
   return this.getMonth() + this.getFullYear() * 100
@@ -143,8 +141,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400&display=swap');
 
 #calendar-template {
-  font-family: "Noto Sans KR", sans-serif;
-  margin-left: 4rem;
+  /*background-color: black;*/
 }
 
 .Day-0 {
@@ -156,7 +153,7 @@ export default {
 
 #calendar-table td, th{
   /*border: 1px solid black;*/
-  height: calc((var(--realVh, 1vh) * 100 - 14vh)/6.5 - 5px);
+  /*height: calc((var(--realVh, 1vh) * 100 - 14vh)/6.5 - 5px);*/
   text-align: left;
   vertical-align: top;
   padding-left: 10px;
@@ -164,7 +161,7 @@ export default {
 }
 #calendar-table th {
   border-bottom: 1px solid lightgray;
-  height: 7vh;
+  height: 5vh;
 }
 
 #calendar-table {
@@ -173,18 +170,21 @@ export default {
   font-size: 1.2rem;
   text-align: center;
   width: 40vw;
+  /*background-color: red;*/
+  height: calc(100% - 5vh);
 }
 
 #calendar-container {
-  width: fit-content;
-  background-color: rgba(255, 251, 226, 0.27);
-  padding: 15px;
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
   user-select: none;
-  margin-top: 2vh;
-  margin-left: 2vh;
+
+  width: fit-content;
+  background-color: rgba(255, 251, 226, 0.27);
+  /*background-color: red;*/
+  padding: 15px;
+  height: calc(100% - 15px*2);
 }
 
 #calendar-container h3{
@@ -204,3 +204,4 @@ export default {
 }
 
 </style>
+<!--TODO: State에서 받아서 todo를 달력에 뿌리기-->

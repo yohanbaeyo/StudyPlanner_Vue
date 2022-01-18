@@ -1,11 +1,13 @@
 <template>
   <div id="app">
-    <div  ref="back" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7);">
+    <button @click="addToDo" style="position: fixed; z-index: 1000">asadas</button>
+    <div  ref="back" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); z-index: 5">
     </div>
+    <div style="position: fixed; top: 0; left: 0;z-index: 1; width: 100vw; height: 1.5rem; background-color: white"></div>
     <div>
-      <NavBar @changeShowingType="changeShowingType" @navCollapsed="changeNavCollapsed"></NavBar>
+      <NavBar @changeShowingType="changeShowingType" @navCollapsed="changeNavCollapsed" style="z-index: 5"></NavBar>
       <!--      <MonthlyCalendar :showing-type="showingType" v-if="showingType===ShowingType.MONTHLY"></MonthlyCalendar>-->
-      <router-view ></router-view>
+      <router-view style="margin-left: calc(48px + 2rem); margin-top: 1.5rem; margin-right: 1.5rem; height: calc(var(--newVh, 1vh) * 100 - 3rem);"></router-view>
     </div>
 
   </div>
@@ -14,8 +16,9 @@
 <script>
 
 // import HelloWorld from "@/components/HelloWorld";
-import {ShowingType} from "@/Enums/Enums"
+import {ShowingType} from "@/Classes/Enums"
 import NavBar from "@/components/NavBar";
+import {ToDoItem} from "@/Classes/ToDoItem";
 // import MonthlyCalendar from "@/components/MonthlyCalendar";
 
 function setScreenSize() {
@@ -51,6 +54,10 @@ export default {
       } else {
         this.$refs.back.style.display = 'none';
       }
+    },
+    addToDo() {
+      let test = new ToDoItem("SSD", new Date(), )
+      this.$store.commit('addNewToDoItem', test);
     }
   }
 
@@ -65,5 +72,7 @@ export default {
 #app {
   margin: 0;
   padding: 0;
+  font-family: "Noto Sans KR", sans-serif;
+
 }
 </style>
