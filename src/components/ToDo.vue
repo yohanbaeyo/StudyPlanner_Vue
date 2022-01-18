@@ -1,10 +1,10 @@
 <template>
   <div class="task-container">
     <div class="task-title-container">
-      <h1>Tasks</h1>
+      <h1>To Do</h1>
     </div>
     <ul>
-      <li v-for="it in $store.state.taskList" :key="it">
+      <li v-for="it in $store.state.todoList" :key="it">
         <div class="task-item-container">
           {{it}}
         </div>

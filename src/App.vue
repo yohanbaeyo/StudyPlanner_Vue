@@ -19,6 +19,7 @@
 import {ShowingType} from "@/Classes/Enums"
 import NavBar from "@/components/NavBar";
 import {ToDoItem} from "@/Classes/ToDoItem";
+import {mapActions} from "vuex";
 // import MonthlyCalendar from "@/components/MonthlyCalendar";
 
 function setScreenSize() {
@@ -39,11 +40,25 @@ export default {
       ShowingType: ShowingType
     }
   },
+/*  computed: {
+    ...mapState({
+      data: 'db'
+    })
+  },*/
   mounted() {
     setScreenSize()
     window.addEventListener('resize', ()=>setScreenSize())
   },
+  created() {
+    this.$http.get('api/db')
+        .then((response) => {
+          this.init(response.data)
+        })
+  },
   methods: {
+    ...mapActions({
+      init: 'dbInit'
+    }),
     changeShowingType(newShowingType) {
       console.log(newShowingType)
       this.showingType = newShowingType
@@ -59,7 +74,7 @@ export default {
       let test = new ToDoItem("SSD", new Date(), )
       this.$store.commit('addNewToDoItem', test);
     }
-  }
+  },
 
 }
 </script>
